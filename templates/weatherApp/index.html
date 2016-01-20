@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://getbootstrap.com/favicon.ico">
+
+    <title>weather app</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
+  </head>
+
+    <body>
+        <h1>Weather app</h1>
+        <form action="" method="POST" class="navbar-form navbar-left" role="search">
+        	{% csrf_token %}
+        	<input type="text" id="search_input" name="" class="form-control" placeholder="Enter the city name" >
+            <input type="button" onclick="myfun()" value="submit" >
+        </form>
+        <br>
+        <br><br>
+        <div id="table"></div>
+
+
+    </body>
+<script type="text/javascript">
+function myfun(){
+    $.post( "/weatherApp/", {'query':$('#search_input').val(), 'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val()})
+    .done(function( data ) {
+        data = JSON.parse(data)
+        document.getElementById('table').innerHTML="";
+        document.getElementById("search_input").value = ""; 
+        var ul = $('<ul>').appendTo('div');
+
+        $(data.result_list).each(function(index, item) {
+        ul.append($(document.createElement('li')).text(item));
+    });
+
+    });
+}
+</script>
+</html>
